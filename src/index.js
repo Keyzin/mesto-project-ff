@@ -1,3 +1,6 @@
+ import "./pages/index.css";
+ import {initialCards} from "./scripts/cards.js";
+
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 
@@ -8,7 +11,7 @@ const cardBox = document.querySelector(".places");
 const cardCurrent = cardBox.querySelector(".places__list");
 
 
-// @todo: Функция создания карточки
+//@todo: Функция создания карточки
 function createCard(onDelete, ...data){
     const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
     cardElement.querySelector(".card__image").src = data[0];
@@ -31,6 +34,7 @@ initialCards.forEach(item=>{
 function deleteCard(){
     this.closest(".places__item").remove();
 }
+
 
 
 // const addButton = document.querySelector(".profile__add-button");
