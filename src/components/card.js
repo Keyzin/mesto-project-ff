@@ -1,18 +1,20 @@
 function createCard(template,onDelete, onLike, onZoomImage, ...data){
+    
     const cardElement = template.querySelector(".places__item").cloneNode(true);
-    cardElement.querySelector(".card__image").src = data[0];
+    const cardImage = cardElement.querySelector(".card__image");
+    cardImage.src = data[0];
     cardElement.querySelector(".card__title").textContent = data[1];
-    cardElement.querySelector(".card__image").alt = data[2];
-    cardElement.querySelector(".card__image").setAttribute("data-popup","popUpImage");
-    cardElement.querySelector(".card__delete-button").addEventListener("click", onDelete);
+    cardImage.alt = data[2];
+    cardImage.setAttribute("data-popup","popUpImage");
+    cardElement.querySelector(".card__delete-button").addEventListener("click", () => onDelete(cardElement));
     cardElement.querySelector(".card__like-button").addEventListener("click", onLike);
-    cardElement.querySelector(".card__image").addEventListener("click", onZoomImage)
+    cardElement.querySelector(".card__image").addEventListener("click", ()=> onZoomImage(cardElement));
     return cardElement;
 }
 
 // @todo: Функция удаления карточки
-function deleteCard(){
-    this.closest(".places__item").remove();
+function deleteCard(card){
+    card.remove();
 }
 
 //@todo: функция установки Like
