@@ -1,59 +1,52 @@
- import "./pages/index.css";
- import {initialCards} from "./scripts/cards.js";
+import "./pages/index.css";
+import {initialCards} from "./scripts/cards.js";
+import {createCard,deleteCard,setLike} from "./scripts/card.js";
+import { addPopUp} from "./scripts/modal.js";
+
 
 // @todo: Темплейт карточки
-const cardTemplate = document.querySelector("#card-template").content;
+export const cardTemplate = document.querySelector("#card-template").content;
 
 
 // @todo: DOM узлы
-
 const cardBox = document.querySelector(".places");
 const cardCurrent = cardBox.querySelector(".places__list");
+const editBtn = document.querySelector(".profile__edit-button");
+const addButton = document.querySelector(".profile__add-button");
+const profileInfo = document.querySelector(".profile__info");
+const profileName = profileInfo.querySelector(".profile__title");
+const profileDesc = profileInfo.querySelector(".profile__description");
+const formEdit = document.forms["edit-profile"];
+const formAdd = document.forms["new-place"];
 
 
-//@todo: Функция создания карточки
-function createCard(onDelete, ...data){
-    const cardElement = cardTemplate.querySelector(".places__item").cloneNode(true);
-    cardElement.querySelector(".card__image").src = data[0];
-    cardElement.querySelector(".card__title").textContent = data[1];
-    cardElement.querySelector(".card__image").alt = data[2];
-    cardElement.querySelector(".card__delete-button").addEventListener("click", onDelete);
-    return cardElement;
-}
-
-//функция заполения карточками
+//функция заполнение карточками
 function fillCards(render){
-    cardCurrent.append(render);
+    cardCurrent.prepend(render);
 }
 
 initialCards.forEach(item=>{
-    fillCards(createCard(deleteCard,item.link, item.name, item.alt));
+    fillCards(createCard(cardTemplate,deleteCard, setLike, addPopUp, item.link, item.name, item.alt));
 }); 
 
-// @todo: Функция удаления карточки
-function deleteCard(){
-    this.closest(".places__item").remove();
+//@todo: Функция обработки формы
+function handleFormSubmit(e){
+    e.preventDefault();
+    if(e.target.closest(".popup").id === "popUpEdit")
+    {   
+        profileName.textContent = formEdit.elements.name.value;
+        profileDesc.textContent = formEdit.elements.description.value;
+    }
+    if(e.target.closest(".popup").id === "popUpAdd")
+    {
+        fillCards(createCard(cardTemplate,deleteCard,setLike, addPopUp, formAdd.elements.link.value, formAdd.elements["place-name"].value, "Описание фото"));
+        formAdd.reset();
+    }
+   
 }
 
-
-
-// const addButton = document.querySelector(".profile__add-button");
-// const popUpImage = document.querySelector(".popup_type_image");
-// const popUpEdit = document.querySelector(".popup_type_edit");
-// const popUpNew = document.querySelector(".popup_type_new-card");
-// const popUpClose = document.querySelectorAll(".popup__close")
-
-// //функция закрытия PopUp
-// function closePopUp(){
-//     popUpClose.forEach((close)=> close.addEventListener("click",()=> {
-
-//         close.parentElement.parentElement.classList.remove("popup_is-opened");
-
-//     }))
-// }
-
-// closePopUp();
-
-// addButton.addEventListener("click", () => {
-//     popUpNew.classList.add("popup_is-opened");
-// });
+//@todo: "Вешаем" слушатели событий
+editBtn.addEventListener("click", addPopUp);
+addButton.addEventListener("click", addPopUp);
+formEdit.addEventListener("submit",handleFormSubmit);
+formAdd.addEventListener("submit",handleFormSubmit);

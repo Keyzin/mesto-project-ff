@@ -2,8 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mesto</title>
 </head>
@@ -17,10 +16,10 @@
       <div class="profile__image" style="background-image: url(<%=require('./images/avatar.jpg')%>);"></div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
-        <button class="profile__edit-button" type="button"></button>
+        <button class="profile__edit-button" type="button" data-popup = "popUpEdit"></button>
         <p class="profile__description">Исследователь океана</p>
       </div>
-      <button class="profile__add-button" type="button"></button>
+      <button class="profile__add-button" type="button" data-popup="popUpAdd"></button>
     </section>
     <section class="places page__section">
       <ul class="places__list">
@@ -32,9 +31,9 @@
       © 2021 Mesto Russia
     </p>
   </footer>
-  <div class="popup popup_type_edit">
+  <div class="popup popup_type_edit popup_is-animated" id="popUpEdit">
     <div class="popup__content">
-      <button type="button" class="popup__close"></button>
+      <button type="button" class="popup__close" data-popup="popUpEdit"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile">
         <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required>
@@ -43,9 +42,9 @@
       </form>
     </div>
   </div>
-  <div class="popup popup_type_new-card">
+  <div class="popup popup_type_new-card popup_is-animated" id="popUpAdd">
     <div class="popup__content">
-      <button type="button" class="popup__close"></button>
+      <button type="button" class="popup__close" data-popup="popUpAdd"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place">
         <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required>
@@ -54,7 +53,7 @@
       </form>
     </div>
   </div>
-  <div class="popup popup_type_image">
+  <div class="popup popup_type_image popup_is-animated" id="popUpImage">
     <div class="popup__content popup__content_content_image">
       <button type="button" class="popup__close"></button>
       <img src="" alt="" class="popup__image">
@@ -62,8 +61,7 @@
     </div>
   </div>
 </div>
-<script src="./scripts/cards.js"></script>
-<script src="./index.js" defer></script>
+
 
 <template id="card-template">
   <li class="places__item card">
