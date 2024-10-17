@@ -18,17 +18,20 @@ function addPopUp(e){
 //@todo: Функция удаления PopUp
 function removePopup(e){
 
-    if( e.target.classList.contains("popup__close") || e.target.classList.contains("popup__button")|| e.target.classList.contains("popup_is-opened") || e.keyCode === ESC_CODE)     
-        {
-            
+    //проверяем все ли поля заполнены
+    const isCheckFields = Array.from(e.target.parentElement.querySelectorAll("input")).every((e)=>e.value.length>0);
+    
+    if(e.target.classList.contains("popup__close") || e.target.type === "submit" && isCheckFields || e.target.classList.contains("popup_is-opened") || e.keyCode === ESC_CODE)     
+    {
+           
              document.querySelector(".popup_is-opened").classList.remove("popup_is-opened");
              document.removeEventListener("keydown",removePopup);
              popUpClose.forEach((e)=>{e.removeEventListener("click",removePopup);})
              popUp.forEach((e)=>e.removeEventListener("click", removePopup));
-        }
-    
+    }
+          
 }
-
+    
 //@todo: Функция заполнения данными
 function handleFormFill(evt){
     if(evt.target.dataset.popup === "popUpEdit")

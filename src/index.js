@@ -1,7 +1,7 @@
 import "./pages/index.css";
-import {initialCards} from "./scripts/cards.js";
-import {createCard,deleteCard,setLike} from "./scripts/card.js";
-import { addPopUp} from "./scripts/modal.js";
+import {initialCards} from "./components/cards.js";
+import {createCard,deleteCard,setLike} from "./components/card.js";
+import { addPopUp} from "./components/modal.js";
 
 
 // @todo: Темплейт карточки
