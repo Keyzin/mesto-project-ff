@@ -40,14 +40,14 @@ function handleFormSubmitEdit(e){
     e.preventDefault();
     profileName.textContent = formEdit.elements.name.value;
     profileDesc.textContent = formEdit.elements.description.value;
-    removePopup(e.target.closest(".popup"));
+    removePopup(popUpEdit);
 }
 
 //@todo: Функция обработки формы добавления карточки
 function handleFormSubmitAdd(e){
     e.preventDefault();
-    fillCards(createCard(cardTemplate,deleteCard,setLike, onOpenImagePopUp, formAdd.elements.link.value, formAdd.elements["place-name"].value, "Описание фото"));
-    removePopup(e.target.closest(".popup"));
+    fillCards(createCard(cardTemplate,deleteCard,setLike, onOpenImagePopUp, formAdd.elements.link.value, formAdd.elements["place-name"].value, formAdd.elements["place-name"].value));
+    removePopup(popUpAdd);
     formAdd.reset();
 }
 
@@ -55,7 +55,8 @@ function onOpenImagePopUp(cardData){
     const newCard = cardData.closest(".card"),
     cardImage = newCard.querySelector(".card__image"),
     cardTitle = newCard.querySelector(".card__title");
-    popUpImageContent.src = cardImage.src
+    popUpImageContent.src = cardImage.src;
+    popUpImageContent.alt = cardImage.alt;
     popUpImageCaption.textContent = cardTitle.closest(".places__item").querySelector(".card__title").textContent;
     addPopUp(popUpImage);
 }

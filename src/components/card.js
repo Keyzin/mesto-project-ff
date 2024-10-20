@@ -8,7 +8,7 @@ function createCard(template,onDelete, onLike, onZoomImage, ...data){
     cardImage.setAttribute("data-popup","popUpImage");
     cardElement.querySelector(".card__delete-button").addEventListener("click", () => onDelete(cardElement));
     cardElement.querySelector(".card__like-button").addEventListener("click", onLike);
-    cardElement.querySelector(".card__image").addEventListener("click", ()=> onZoomImage(cardElement));
+    cardImage.addEventListener("click", ()=> onZoomImage(cardElement));
     return cardElement;
 }
 
