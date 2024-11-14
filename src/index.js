@@ -33,7 +33,7 @@ const popUpImageCaption = popUpImage.querySelector(".popup__caption");
 
 //функция заполнение карточками
 function fillCards(card){
-    cardCurrent.prepend(card);
+    cardCurrent.append(card);
 }
 
 
@@ -64,7 +64,7 @@ function handleFormSubmitAdd(e){
     waitForLoading(true, formAdd.querySelector(".popup__button"));
     addNewCard(formAdd.elements["place-name"].value,formAdd.elements.link.value).
     then((data)=>{
-        fillCards(createCard(cardTemplate,deleteCard,setLike, onOpenImagePopUp, data, userId));
+        cardCurrent.prepend(createCard(cardTemplate,deleteCard,setLike, onOpenImagePopUp, data, userId));
     }).catch((error)=>{
         console.log(error)
     }).finally(()=>{
