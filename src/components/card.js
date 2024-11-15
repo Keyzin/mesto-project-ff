@@ -19,16 +19,19 @@ function createCard(template,onDelete, onLike, onZoomImage, data, userId){
         cardElement.querySelector(".card__delete-button").addEventListener("click", () => onDelete(data._id, cardElement));
     }
 
-    data.likes.some(like=>like._id == userId) ? likeBtn.classList.add("card__like-button_is-active") : "";
-
+   likeBtn.classList.toggle("card__like-button_is-active", data.likes.some(like=>like._id == userId))
 
     return cardElement;
 }
 
 // @todo: Функция удаления карточки
 function deleteCard(cardId, card){
-    card.remove();
-    deleteMyCard(cardId);
+    deleteMyCard(cardId).
+    then(()=>{
+        card.remove();
+    }).catch(error=>{
+        console.log(error);
+    })
 }
 
 //@todo: функция установки Like

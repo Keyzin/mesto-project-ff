@@ -2,12 +2,20 @@ import "./pages/index.css";
 
 import {createCard,deleteCard,setLike} from "./components/card.js";
 import { addPopUp,removePopup,handleFormClickOutside} from "./components/modal.js";
-import {clearValidation, enableValidation, validationConfig} from "./components/validation.js";
+import {clearValidation, enableValidation} from "./components/validation.js";
 import { getInitialCards, getUsersData, editProfileData, addNewCard,updatePhoto} from "./components/api.js";
 
 // @todo: Темплейт карточки
 export const cardTemplate = document.querySelector("#card-template").content;
 
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_active'
+  }
 
 // @todo: DOM узлы
 const cardBox = document.querySelector(".places");
@@ -36,57 +44,62 @@ function fillCards(card){
     cardCurrent.append(card);
 }
 
-
-function waitForLoading(isLoading, btn){
+function setLoadingText(isLoading, btn){
     btn.textContent = isLoading ? "Сохранение..." : "Сохранить"
 }
  
 //@todo: Функция обработки формы редактирования
 function handleFormSubmitEdit(e){
     e.preventDefault();
-    waitForLoading(true, popUpEdit.querySelector(".popup__button"));
+    setLoadingText(true, popUpEdit.querySelector(".popup__button"));
     editProfileData(formEdit.elements.name.value,formEdit.elements.description.value).
     then(res=>{
-        setProfileData(res.name,res.about, res.avatar);
+        setProfileData({
+            name: res.name,
+            about: res.about,
+            avatar: res.avatar
+        });
     }).catch((error)=>{
         console.log(error);
     }).finally(()=>{
-        waitForLoading(false, popUpEdit.querySelector(".popup__button"));
+        setLoadingText(false, popUpEdit.querySelector(".popup__button"));
         removePopup(popUpEdit);
     })
-  
-    
+   
 }
 
 //@todo: Функция обработки формы добавления карточки
 function handleFormSubmitAdd(e){
     e.preventDefault();
-    waitForLoading(true, formAdd.querySelector(".popup__button"));
+    setLoadingText(true, formAdd.querySelector(".popup__button"));
     addNewCard(formAdd.elements["place-name"].value,formAdd.elements.link.value).
     then((data)=>{
         cardCurrent.prepend(createCard(cardTemplate,deleteCard,setLike, onOpenImagePopUp, data, userId));
     }).catch((error)=>{
         console.log(error)
     }).finally(()=>{
-        waitForLoading(false, formAdd.querySelector(".popup__button"));
+        setLoadingText(false, formAdd.querySelector(".popup__button"));
         removePopup(popUpAdd);
         formAdd.reset();
     })
-    
-   
+      
 }
 
 function handleFormSubmitAddPhoto(e){
     e.preventDefault();
-    waitForLoading(true, formPhoto.querySelector(".popup__button"));
+    setLoadingText(true, formPhoto.querySelector(".popup__button"));
     updatePhoto(formPhoto.elements["place-name"].value).
     then(res=>{
-        setProfileData(res.name,res.about, res.avatar)
+        setProfileData({
+            name:res.name,
+            about:res.about,
+            avatar:res.avatar
+        })
     }).catch(error=>{
         console.log(error);
     }).finally(()=>{
         removePopup(popUpPhoto);
-        waitForLoading(false, formPhoto.querySelector(".popup__button"));
+        setLoadingText(false, formPhoto.querySelector(".popup__button"));
     });
 }
 
@@ -127,24 +140,17 @@ popUpClose.forEach((e)=>{e.addEventListener("click",(e)=>{
 })});
 popUp.forEach((e)=>e.addEventListener("click", handleFormClickOutside));
 
-
-
-const setProfileData = (name,about, avatar) => {
+const setProfileData = ({name,about, avatar}) => {
     profileName.textContent = name;
     profileDesc.textContent = about;
     profileImage.style.backgroundImage = `url(${avatar})`;
 }
 
- getUsersData().
-  then(({name, about, avatar})=>{
-      setProfileData(name, about, avatar)
-  })
-  
   let userId;
  
   Promise.all([getUsersData(), getInitialCards()]).
   then(([{name, about,avatar, ["_id"]:currentUserId}, cardsData]) =>{
-    setProfileData(name, about, avatar)
+    setProfileData({name, about, avatar})
     cardsData.forEach(data => fillCards(createCard(cardTemplate,deleteCard, setLike, onOpenImagePopUp, data, currentUserId)))
     userId = currentUserId;
   });
